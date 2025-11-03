@@ -8,23 +8,30 @@ const reviews = [
 ];
 
 function Stars({ n }) {
-  return <div className="stars">{"★".repeat(n)}{"☆".repeat(5 - n)}</div>;
+  return (
+    <p className="stars" aria-label={`${n} out of 5 stars`}>
+      {"★".repeat(n)}{"☆".repeat(5 - n)}
+    </p>
+  );
 }
 
 export default function Testimonials() {
   return (
-    <section className="section testimonials">
+    <section className="section testimonials" aria-labelledby="testimonials-title">
       <div className="container">
-        <h2 className="section-title">Testimonials</h2>
-        <div className="t-grid">
+        <h2 id="testimonials-title" className="section-title">Testimonials</h2>
+
+        <ul className="t-grid" role="list">
           {reviews.map((r, i) => (
-            <article key={i} className="tcard">
-              <Stars n={r.stars} />
-              <p>{r.text}</p>
-              <strong>{r.name}</strong>
-            </article>
+            <li key={i}>
+              <article className="tcard" aria-labelledby={`reviewer-${i}`}>
+                <Stars n={r.stars} />
+                <p>{r.text}</p>
+                <p id={`reviewer-${i}`} style={{ fontWeight: 800 }}>{r.name}</p>
+              </article>
+            </li>
           ))}
-        </div>
+        </ul>
       </div>
     </section>
   );

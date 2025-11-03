@@ -9,8 +9,9 @@ import Footer from "./components/Footer.jsx";
 export default function App() {
   return (
     <>
+      <a href="#main-content" className="visually-hidden-focusable">Skip to main content</a>
       <Navbar />
-      <main>
+      <main id="main-content" role="main">
         <Hero />
         <Highlights />
         <Testimonials />

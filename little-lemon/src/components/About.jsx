@@ -2,23 +2,34 @@ import React from "react";
 
 export default function About() {
   return (
-    <section id="about" className="section">
+    <section id="about" className="section" aria-labelledby="about-title">
       <div className="container">
-        <h2 className="section-title">About Little Lemon</h2>
+        <h2 id="about-title" className="section-title">About Little Lemon</h2>
+
         <div className="about-grid">
-          <div className="about-text">
+          <article className="about-text">
             <p>
               Family-owned Mediterranean restaurant in Chicago. We focus on
-              fresh, seasonal ingredients and simple, flavorful dishes.
+              seasonal ingredients, simple techniques, and bright flavors.
             </p>
-          </div>
-          <div className="about-media">
-            <div className="ph-box"></div>
+            <p style={{ marginTop: 12, fontSize: "var(--small)", color: "#555" }}>
+              (Replace with final owner story and mission.)
+            </p>
+          </article>
+
+          <aside className="about-media" aria-label="About section images">
+            <figure className="ph-box">
+              <figcaption className="visually-hidden">Kitchen / chef placeholder</figcaption>
+            </figure>
             <div className="media-row">
-              <div className="ph-box"></div>
-              <div className="ph-box"></div>
+              <figure className="ph-box">
+                <figcaption className="visually-hidden">Dining room placeholder</figcaption>
+              </figure>
+              <figure className="ph-box">
+                <figcaption className="visually-hidden">Dish close-up placeholder</figcaption>
+              </figure>
             </div>
-          </div>
+          </aside>
         </div>
       </div>
     </section>
