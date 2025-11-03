@@ -406,3 +406,19 @@ h2.section-title {
   text-align: center;
   margin-top: 12px;
 }
+/* --- Forms (Reservations) --- */
+label { display:block; font-weight:700; margin-bottom:6px; }
+input, select, textarea {
+  width: 100%;
+  padding: 10px 12px;
+  border-radius: 10px;
+  border: 1px solid #ddd;
+  background: #fff;
+}
+input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="true"] {
+  border-color: #e67a7a;
+  outline: 2px solid #ffd7d7;
+}
+button[disabled], .cta[aria-disabled="true"] {
+  opacity: .6; cursor: not-allowed;
+}

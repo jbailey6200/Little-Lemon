@@ -12,7 +12,7 @@ export default function Hero() {
               Fresh, seasonal dishes inspired by family recipes and the flavors
               of the Mediterranean.
             </p>
-            <a className="cta" href="#reservations" role="button" aria-label="Reserve a table">
+            <a className="cta" href="/reservations" role="button" aria-label="Reserve a table">
               Reserve a Table
             </a>
           </header>
