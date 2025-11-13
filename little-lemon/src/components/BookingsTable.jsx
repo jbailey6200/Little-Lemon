@@ -10,18 +10,20 @@ const bookingData = [
 
 export default function BookingsTable() {
   return (
-    <div className="bookings-table-container">
-      <h2 className="section-title" style={{ marginBottom: 20 }}>Current Bookings</h2>
+    <section className="bookings-table-container" aria-labelledby="bookings-heading">
+      <h2 id="bookings-heading" className="section-title" style={{ marginBottom: 20 }}>
+        Current Bookings
+      </h2>
       
-      <div className="table-wrapper">
-        <table className="bookings-table">
+      <div className="table-wrapper" role="region" aria-label="Table of current reservations" tabIndex="0">
+        <table className="bookings-table" role="table" aria-describedby="bookings-heading">
           <thead>
             <tr>
-              <th>Date</th>
-              <th>Time</th>
-              <th>Guests</th>
-              <th>Name</th>
-              <th>Occasion</th>
+              <th scope="col">Date</th>
+              <th scope="col">Time</th>
+              <th scope="col">Guests</th>
+              <th scope="col">Name</th>
+              <th scope="col">Occasion</th>
             </tr>
           </thead>
           <tbody>
@@ -37,6 +39,6 @@ export default function BookingsTable() {
           </tbody>
         </table>
       </div>
-    </div>
+    </section>
   );
 }

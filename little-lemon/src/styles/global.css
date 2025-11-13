@@ -474,3 +474,38 @@ select[aria-invalid="true"],
 textarea[aria-invalid="true"] {
   border-color: #d32f2f;
 }
+.visually-hidden {
+  position: absolute;
+  width: 1px;
+  height: 1px;
+  margin: -1px;
+  padding: 0;
+  overflow: hidden;
+  clip: rect(0, 0, 0, 0);
+  white-space: nowrap;
+  border: 0;
+}
+
+.error-message {
+  display: block;
+  color: #d32f2f;
+  font-size: var(--small);
+  margin-top: 4px;
+}
+
+input[aria-invalid="true"],
+select[aria-invalid="true"],
+textarea[aria-invalid="true"] {
+  border-color: #d32f2f;
+}
+
+/* Focus visible for keyboard navigation */
+*:focus-visible {
+  outline: 2px solid var(--yellow);
+  outline-offset: 2px;
+}
+
+/* Scrollable table region */
+.table-wrapper[role="region"][tabIndex="0"]:focus {
+  outline: 2px solid var(--green);
+}
