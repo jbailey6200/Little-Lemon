@@ -4,7 +4,6 @@ import { initializeTimes, updateTimes, submitBooking } from "../utils/bookingAPI
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
 export default function ReservationForm({ onSuccess }) {
-  // controlled inputs
   const [date, setDate] = useState(() => new Date().toISOString().slice(0, 10));
   const [time, setTime] = useState("");
   const [guests, setGuests] = useState(2);
@@ -12,46 +11,67 @@ export default function ReservationForm({ onSuccess }) {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [requests, setRequests] = useState("");
-
-  // derived/stateful data
   const [times, setTimes] = useState([]);
   const [submitting, setSubmitting] = useState(false);
   const [serverMsg, setServerMsg] = useState("");
+  
+  // Touched states for validation feedback
+  const [touched, setTouched] = useState({
+    date: false,
+    time: false,
+    guests: false,
+    name: false,
+    email: false,
+  });
 
-  // uncontrolled example (demonstration): focus the first invalid field
   const nameRef = useRef(null);
   const emailRef = useRef(null);
 
-  // Initialize times when component mounts
   useEffect(() => {
     const availableTimes = initializeTimes();
     setTimes(availableTimes);
   }, []);
 
-  // Update times when date changes
   useEffect(() => {
     const availableTimes = updateTimes(date);
     setTimes(availableTimes);
-    setTime(""); // reset time when date changes
+    setTime("");
   }, [date]);
 
-  const isValid = useMemo(() => {
-    if (!date) return false;
-    if (!time) return false;
-    const n = Number(guests);
-    if (!(n >= 1 && n <= 10)) return false;
-    if (name.trim().length < 2) return false;
-    if (!emailRe.test(email)) return false;
-    return true;
+  // Validation logic
+  const validation = useMemo(() => {
+    return {
+      date: !!date,
+      time: !!time,
+      guests: Number(guests) >= 1 && Number(guests) <= 10,
+      name: name.trim().length >= 2,
+      email: emailRe.test(email),
+    };
   }, [date, time, guests, name, email]);
+
+  const isValid = Object.values(validation).every(Boolean);
+
+  const handleBlur = (field) => {
+    setTouched((prev) => ({ ...prev, [field]: true }));
+  };
 
   async function handleSubmit(e) {
     e.preventDefault();
+    
+    // Mark all fields as touched
+    setTouched({
+      date: true,
+      time: true,
+      guests: true,
+      name: true,
+      email: true,
+    });
+
     setServerMsg("");
 
     if (!isValid) {
-      if (!name.trim() && nameRef.current) nameRef.current.focus();
-      else if (!emailRe.test(email) && emailRef.current) emailRef.current.focus();
+      if (!validation.name && nameRef.current) nameRef.current.focus();
+      else if (!validation.email && emailRef.current) emailRef.current.focus();
       return;
     }
 
@@ -63,13 +83,19 @@ export default function ReservationForm({ onSuccess }) {
     setServerMsg(res.message);
     if (res.ok) {
       onSuccess?.(payload);
-      // clear form
       setTime("");
       setGuests(2);
       setOccasion("None");
       setName("");
       setEmail("");
       setRequests("");
+      setTouched({
+        date: false,
+        time: false,
+        guests: false,
+        name: false,
+        email: false,
+      });
     }
   }
 
@@ -84,35 +110,46 @@ export default function ReservationForm({ onSuccess }) {
 
       <div className="grid-12" style={{ rowGap: 16 }}>
         <div style={{ gridColumn: "span 6" }}>
-          <label htmlFor="date">Date</label>
+          <label htmlFor="date">Date *</label>
           <input
             id="date"
             type="date"
             value={date}
             onChange={(e) => setDate(e.target.value)}
+            onBlur={() => handleBlur('date')}
             required
-            aria-invalid={!date ? "true" : "false"}
+            min={new Date().toISOString().slice(0, 10)}
+            aria-invalid={touched.date && !validation.date ? "true" : "false"}
+            aria-describedby={touched.date && !validation.date ? "date-error" : undefined}
           />
+          {touched.date && !validation.date && (
+            <span id="date-error" className="error-message">Please select a date</span>
+          )}
         </div>
 
         <div style={{ gridColumn: "span 6" }}>
-          <label htmlFor="time">Time</label>
+          <label htmlFor="time">Time *</label>
           <select
             id="time"
             value={time}
             onChange={(e) => setTime(e.target.value)}
+            onBlur={() => handleBlur('time')}
             required
-            aria-invalid={!time ? "true" : "false"}
+            aria-invalid={touched.time && !validation.time ? "true" : "false"}
+            aria-describedby={touched.time && !validation.time ? "time-error" : undefined}
           >
             <option value="">Select a time</option>
             {times.map((t) => (
               <option key={t} value={t}>{t}</option>
             ))}
           </select>
+          {touched.time && !validation.time && (
+            <span id="time-error" className="error-message">Please select a time</span>
+          )}
         </div>
 
         <div style={{ gridColumn: "span 4" }}>
-          <label htmlFor="guests">Guests (1–10)</label>
+          <label htmlFor="guests">Guests (1–10) *</label>
           <input
             id="guests"
             type="number"
@@ -120,9 +157,14 @@ export default function ReservationForm({ onSuccess }) {
             max="10"
             value={guests}
             onChange={(e) => setGuests(e.target.value)}
+            onBlur={() => handleBlur('guests')}
             required
-            aria-invalid={!(Number(guests) >= 1 && Number(guests) <= 10)}
+            aria-invalid={touched.guests && !validation.guests ? "true" : "false"}
+            aria-describedby={touched.guests && !validation.guests ? "guests-error" : undefined}
           />
+          {touched.guests && !validation.guests && (
+            <span id="guests-error" className="error-message">Must be between 1 and 10</span>
+          )}
         </div>
 
         <div style={{ gridColumn: "span 8" }}>
@@ -136,7 +178,7 @@ export default function ReservationForm({ onSuccess }) {
         </div>
 
         <div style={{ gridColumn: "span 6" }}>
-          <label htmlFor="name">Full name</label>
+          <label htmlFor="name">Full name *</label>
           <input
             id="name"
             ref={nameRef}
@@ -144,13 +186,19 @@ export default function ReservationForm({ onSuccess }) {
             placeholder="Jane Doe"
             value={name}
             onChange={(e) => setName(e.target.value)}
+            onBlur={() => handleBlur('name')}
             required
-            aria-invalid={name.trim().length < 2}
+            minLength="2"
+            aria-invalid={touched.name && !validation.name ? "true" : "false"}
+            aria-describedby={touched.name && !validation.name ? "name-error" : undefined}
           />
+          {touched.name && !validation.name && (
+            <span id="name-error" className="error-message">Name must be at least 2 characters</span>
+          )}
         </div>
 
         <div style={{ gridColumn: "span 6" }}>
-          <label htmlFor="email">Email</label>
+          <label htmlFor="email">Email *</label>
           <input
             id="email"
             ref={emailRef}
@@ -158,9 +206,14 @@ export default function ReservationForm({ onSuccess }) {
             placeholder="jane@example.com"
             value={email}
             onChange={(e) => setEmail(e.target.value)}
+            onBlur={() => handleBlur('email')}
             required
-            aria-invalid={!emailRe.test(email)}
+            aria-invalid={touched.email && !validation.email ? "true" : "false"}
+            aria-describedby={touched.email && !validation.email ? "email-error" : undefined}
           />
+          {touched.email && !validation.email && (
+            <span id="email-error" className="error-message">Please enter a valid email</span>
+          )}
         </div>
 
         <div style={{ gridColumn: "1 / -1" }}>
