@@ -1,10 +1,14 @@
 import React from "react";
+import { useNavigate } from "react-router-dom";
 import ReservationForm from "../components/ReservationForm.jsx";
-import BookingsTable from "../components/BookingsTable.jsx";  // ← ADD THIS
 
 export default function Reservations() {
+  const navigate = useNavigate();
+
   function handleSuccess(payload) {
     console.log("Booking confirmed:", payload);
+    // Navigate to confirmation page with booking data
+    navigate('/confirmed', { state: { bookingData: payload } });
   }
 
   return (
@@ -25,11 +29,6 @@ export default function Reservations() {
               please contact us directly.
             </p>
           </aside>
-        </section>
-
-        {/* ADD THIS SECTION */}
-        <section style={{ marginTop: 60 }}>
-          <BookingsTable />
         </section>
       </div>
     </main>

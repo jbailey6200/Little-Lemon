@@ -7,6 +7,7 @@ import Testimonials from "./components/Testimonials.jsx";
 import About from "./components/About.jsx";
 import Footer from "./components/Footer.jsx";
 import Reservations from "./pages/Reservations.jsx";
+import ConfirmedBooking from "./pages/ConfirmedBooking.jsx";  // Add this
 
 function Home() {
   return (
@@ -29,6 +30,7 @@ export default function App() {
       <Routes>
         <Route path="/" element={<Home />} />
         <Route path="/reservations" element={<Reservations />} />
+        <Route path="/confirmed" element={<ConfirmedBooking />} />  {/* Add this */}
       </Routes>
       <Footer />
     </>
