@@ -1,5 +1,6 @@
 import React from "react";
 import ReservationForm from "../components/ReservationForm.jsx";
+import BookingsTable from "../components/BookingsTable.jsx";  // ← ADD THIS
 
 export default function Reservations() {
   function handleSuccess(payload) {
@@ -24,6 +25,11 @@ export default function Reservations() {
               please contact us directly.
             </p>
           </aside>
+        </section>
+
+        {/* ADD THIS SECTION */}
+        <section style={{ marginTop: 60 }}>
+          <BookingsTable />
         </section>
       </div>
     </main>

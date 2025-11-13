@@ -422,3 +422,43 @@ input[aria-invalid="true"], select[aria-invalid="true"], textarea[aria-invalid="
 button[disabled], .cta[aria-disabled="true"] {
   opacity: .6; cursor: not-allowed;
 }
+/* Bookings Table */
+.bookings-table-container {
+  margin: 40px 0;
+}
+
+.table-wrapper {
+  overflow-x: auto;
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  background: white;
+}
+
+.bookings-table {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.bookings-table thead {
+  background: var(--green);
+  color: white;
+}
+
+.bookings-table th {
+  padding: 16px;
+  text-align: left;
+  font-weight: 800;
+}
+
+.bookings-table td {
+  padding: 14px 16px;
+  border-bottom: 1px solid #eee;
+}
+
+.bookings-table tbody tr:hover {
+  background: var(--light);
+}
+
+.bookings-table tbody tr:last-child td {
+  border-bottom: none;
+}

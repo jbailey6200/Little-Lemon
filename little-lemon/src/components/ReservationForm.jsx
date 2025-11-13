@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo, useRef, useState } from "react";
-import { fetchAvailableTimes, submitBooking } from "../utils/bookingAPI";
+import { initializeTimes, updateTimes, submitBooking } from "../utils/bookingAPI";
 
 const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 
@@ -22,8 +22,16 @@ export default function ReservationForm({ onSuccess }) {
   const nameRef = useRef(null);
   const emailRef = useRef(null);
 
+  // Initialize times when component mounts
   useEffect(() => {
-    setTimes(fetchAvailableTimes(date));
+    const availableTimes = initializeTimes();
+    setTimes(availableTimes);
+  }, []);
+
+  // Update times when date changes
+  useEffect(() => {
+    const availableTimes = updateTimes(date);
+    setTimes(availableTimes);
     setTime(""); // reset time when date changes
   }, [date]);
 
